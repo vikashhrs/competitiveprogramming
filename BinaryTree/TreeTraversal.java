@@ -46,7 +46,9 @@ public class TreeTraversal{
         root.left.right.left = new Node(14);  
         root.left.right.left.left = new Node(13);  
         root.left.right.left.right = new Node(15);  
-        root.left.right.right = new Node(19);  
+        root.left.right.right = new Node(19); 
+        
+        boundaryTraversal(root); 
 
         // System.out.println("\n inorderTraversalRecursive \n");
         // inorderTraversalRecursive(root);
@@ -69,8 +71,8 @@ public class TreeTraversal{
         //     System.out.println("Key = " + entry.getKey() +  ", Value = " + entry.getValue()); 
         // }
 
-        levelOrder(root);
-        System.out.println();
+        // levelOrder(root);
+        // System.out.println();
         // reverseLevelOrder(root);
         // System.out.println();
         // zigzagTraversal(root);
@@ -84,7 +86,7 @@ public class TreeTraversal{
         //     System.out.println("Successor = "+successor.value);
         // else
         //     System.out.println("No successor!");
-        connectNodesAtSameLevel(root);
+        // connectNodesAtSameLevel(root);
     }
 
     public static void inorderTraversalRecursive(Node root){
@@ -300,7 +302,7 @@ public class TreeTraversal{
         connectNodes(root);
     }
 
-    public static void connectNode(Node root){
+    public static void connectNodes(Node root){
         if(root == null)
             return;
 
@@ -310,8 +312,8 @@ public class TreeTraversal{
         if(root.right != null)
             root.right.next = root.next != null ? root.next.left : null;
 
-        connectNode(root.left);
-        connectNode(root.right);
+        connectNodes(root.left);
+        connectNodes(root.right);
     }
 
     public static Node nextNodeOfNode(Node root, int nextOf){
@@ -322,5 +324,58 @@ public class TreeTraversal{
         nextNodeOfNode(root.right, nextOf);
 
         return null;
+    }
+
+    public static boolean isLeaf(Node node){
+        return node.right == null && node.left == null;
+    }
+
+    public static void boundaryTraversal(Node root){
+        if(root != null && !isLeaf(root))
+            System.out.print("\t"+root.value);
+            printLeft(root.left);
+            printLeaves(root);
+            printRight(root.right);
+    }
+
+    public static void printLeft(Node root){
+        while(root != null){
+            if(!isLeaf(root))
+                System.out.print("\t"+root.value);
+
+            if(root.left != null){
+                root = root.left;
+            }
+            else{
+                root = root.right;
+            }
+        }
+    }
+
+    public static void printLeaves(Node root){
+        if(root == null)
+            return;
+        if(isLeaf(root))
+            System.out.print("\t"+root.value);
+        printLeaves(root.left);
+        printLeaves(root.right);
+    }
+
+    public static void printRight(Node root){
+        Stack<Node> st = new Stack<Node>();
+        while(root != null){
+            if(!isLeaf(root))
+                st.push(root);
+
+            if(root.right !=null)
+                root = root.right;
+            else
+                root = root.left;
+        }
+
+        while(!st.isEmpty()){
+            Node current = st.pop();
+            System.out.print("\t"+current.value);
+        }
     }
 }
